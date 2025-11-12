@@ -2,6 +2,34 @@
 
 <%= render @post %>
 
+<!-- コメントフォーム -->
+<%= form_with(model: [@post, Comment.new], local: true) do |f| %>
+  <%= f.text_area :body %>
+  <%= f.hidden_field :parent_id, value: nil %> <!-- 通常のコメントなので親なし -->
+  <%= f.submit "コメント投稿" %>
+<% end %>
+
+<!-- コメント表示 -->
+<% @post.comments.where(parent_id: nil).each do |comment| %>
+  <div class="comment">
+    <p><%= comment.body %></p>
+
+    <!-- 返信フォーム -->
+    <%= form_with(model: [@post, Comment.new], local: true) do |f| %>
+      <%= f.text_area :body %>
+      <%= f.hidden_field :parent_id, value: comment.id %>
+      <%= f.submit "返信" %>
+    <% end %>
+
+    <!-- 子コメントの表示 -->
+    <% comment.children.each do |reply| %>
+      <div class="reply" style="margin-left: 20px;">
+        <p><%= reply.body %></p>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
 <div>
   <%= link_to "Edit this post", edit_post_path(@post) %> |
   <%= link_to "Back to posts", posts_path %>

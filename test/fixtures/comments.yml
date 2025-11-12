@@ -5,13 +5,9 @@ one:
   post: one
   body: MyText
   kind: 1
-  commentable: one
-  commentable_type: Commentable
 
 two:
   user: two
   post: two
   body: MyText
   kind: 1
-  commentable: two
-  commentable_type: Commentable

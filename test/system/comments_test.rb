@@ -15,8 +15,6 @@ class CommentsTest < ApplicationSystemTestCase
     click_on "New comment"
 
     fill_in "Body", with: @comment.body
-    fill_in "Commentable", with: @comment.commentable_id
-    fill_in "Commentable type", with: @comment.commentable_type
     fill_in "Kind", with: @comment.kind
     fill_in "Post", with: @comment.post_id
     fill_in "User", with: @comment.user_id
@@ -31,8 +29,6 @@ class CommentsTest < ApplicationSystemTestCase
     click_on "Edit this comment", match: :first
 
     fill_in "Body", with: @comment.body
-    fill_in "Commentable", with: @comment.commentable_id
-    fill_in "Commentable type", with: @comment.commentable_type
     fill_in "Kind", with: @comment.kind
     fill_in "Post", with: @comment.post_id
     fill_in "User", with: @comment.user_id

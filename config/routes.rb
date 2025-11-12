@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   get '/mypage', to: 'users#show'
 
   resources :posts do
-    resources :comments, only: [:create, :destroy] # ネストしてもOK
+    resources :comments, only: [:create, :destroy]
   end
 
   resources :comments

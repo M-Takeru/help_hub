@@ -7,3 +7,18 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+
+
+(1..5).each do |i|
+  user = User.create!(
+    email: "user#{i}@example.com",
+    password: 'abc123',
+    introduction: '自己紹介です',
+    name: "User#{i}",
+    gender: 1
+  )
+
+  post = Post.create!(title: "テスト投稿#{i}", body: "これはサンプル投稿#{i}です。", user: user)
+  post.comments.create!(user: user, body: "これはテストコメント#{i}です。")
+end

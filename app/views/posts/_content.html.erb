@@ -1,3 +1,5 @@
 <%= render post %>
+<%= link_to "Show this post", post_path(post), data: { turbo: false } %></br>
+
 <%= link_to "Edit this post", edit_post_path(post) %>
 <%= button_to "Destroy this post", post, method: :delete %>
