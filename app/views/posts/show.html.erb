@@ -2,31 +2,31 @@
 
 <%= render @post %>
 
-<!-- コメントフォーム -->
-<%= form_with(model: [@post, Comment.new], local: true) do |f| %>
-  <%= f.text_area :body %>
-  <%= f.hidden_field :parent_id, value: nil %> <!-- 通常のコメントなので親なし -->
-  <%= f.submit "コメント投稿" %>
-<% end %>
+<!-- コメントフォームのトグルエリア -->
+<turbo-frame id="new_comment_form">
+  <%= link_to "コメントを書く", new_comment_path(post_id: @post.id), data: { turbo_frame: "new_comment_form" } %>
+</turbo-frame>
 
 <!-- コメント表示 -->
 <% @post.comments.where(parent_id: nil).each do |comment| %>
   <div class="comment">
+    <p><%= comment.user.name %></p>
     <p><%= comment.body %></p>
 
-    <!-- 返信フォーム -->
-    <%= form_with(model: [@post, Comment.new], local: true) do |f| %>
-      <%= f.text_area :body %>
-      <%= f.hidden_field :parent_id, value: comment.id %>
-      <%= f.submit "返信" %>
-    <% end %>
 
-    <!-- 子コメントの表示 -->
+    <!-- 返信リンク＆フォームのフレーム -->
+    <turbo-frame id="reply_form_<%= comment.id %>">
+      <%= link_to "返信を書く",
+          new_comment_path(post_id: @post.id, parent_id: comment.id),
+          data: { turbo_frame: "reply_form_#{comment.id}" } %>
+    </turbo-frame>
+
     <% comment.children.each do |reply| %>
-      <div class="reply" style="margin-left: 20px;">
+      <div class="reply" style="margin-left:20px;">
         <p><%= reply.body %></p>
       </div>
     <% end %>
+
   </div>
 <% end %>
 

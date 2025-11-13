@@ -19,6 +19,7 @@
     gender: 1
   )
 
-  post = Post.create!(title: "テスト投稿#{i}", body: "これはサンプル投稿#{i}です。", user: user)
+  tag = Tag.create!(name: "#{i}つ目のタグだよ〜〜")
+  post = Post.create!(title: "テスト投稿#{i}", body: "これはサンプル投稿#{i}です。", status: 1, user: user)
   post.comments.create!(user: user, body: "これはテストコメント#{i}です。")
 end
