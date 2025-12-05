@@ -1,0 +1,31 @@
+<div id="comments_list">
+  <turbo-frame id="new_comment_form">
+    <%= link_to "コメントを書く",
+        new_comment_path(post_id: post.id),
+        data: {
+          turbo_frame: "new_comment_form"
+        } %>
+  </turbo-frame>
+
+  <% post.comments.where(parent_id: nil).order(created_at: :desc).each do |comment| %>
+    <div class="comment">
+      <p><%= comment.user.name %></p>
+      <p><%= comment.body %></p>
+
+      <turbo-frame id="reply_form_<%= comment.id %>">
+        <%= link_to "返信を書く",
+            new_comment_path(post_id: post.id, parent_id: comment.id),
+            data: {
+              turbo_frame: "reply_form_#{comment.id}"
+            } %>
+      </turbo-frame>
+
+      <% comment.children.each do |reply| %>
+        <div class="reply" style="margin-left:20px;">
+          <p><%= reply.user.name %></p>
+          <p><%= reply.body %></p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

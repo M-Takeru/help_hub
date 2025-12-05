@@ -1,32 +1,14 @@
-<% content_for :title, "New comment" %>
-
-<h1>New comment</h1>
-
-<%= render "form", comment: @comment %>
-
-<turbo-frame id="new_comment_form">
-  <%= form_with(model: [@post, @comment]) do |f| %>
-    <%= f.hidden_field :user_id, value: current_user.id %>
-    <%= f.text_area :body %>
-    <%= f.hidden_field :parent_id, value: @comment.parent_id %>
-    <%= f.submit "コメント投稿" %>
-  <% end %>
-
-  <%= link_to "閉じる", post_path(@post), data: { turbo_frame: "new_comment_form" } %>
-</turbo-frame>
-
 <turbo-frame id="<%= @comment.parent_id ? "reply_form_#{@comment.parent_id}" : "new_comment_form" %>">
   <%= form_with(model: [@post, @comment]) do |f| %>
     <%= f.hidden_field :user_id, value: current_user.id %>
-    <%= f.text_area :body %>
+    <%= f.text_area :body, placeholder: "コメントを入力" %>
     <%= f.hidden_field :parent_id, value: @comment.parent_id %>
-    <%= f.submit "返信する" %>
+    <%= f.submit (@comment.parent_id ? "返信する" : "コメント投稿") %>
   <% end %>
 
-  <%= link_to "閉じる", post_path(@post),
-      data: { turbo_frame: (@comment.parent_id ? "reply_form_#{@comment.parent_id}" : "new_comment_form") } %>
+  <%= link_to "閉じる",
+      post_path(@post),
+      data: {
+        turbo_frame: (@comment.parent_id ? "reply_form_#{@comment.parent_id}" : "new_comment_form")
+      } %>
 </turbo-frame>
-
-<div>
-  <%= link_to "Back to comments", comments_path %>
-</div>

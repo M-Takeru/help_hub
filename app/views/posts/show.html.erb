@@ -2,37 +2,13 @@
 
 <%= render @post %>
 
-<!-- コメントフォームのトグルエリア -->
-<turbo-frame id="new_comment_form">
-  <%= link_to "コメントを書く", new_comment_path(post_id: @post.id), data: { turbo_frame: "new_comment_form" } %>
-</turbo-frame>
+<%= render "comments/list", post: @post %> 
 
-<!-- コメント表示 -->
-<% @post.comments.where(parent_id: nil).each do |comment| %>
-  <div class="comment">
-    <p><%= comment.user.name %></p>
-    <p><%= comment.body %></p>
-
-
-    <!-- 返信リンク＆フォームのフレーム -->
-    <turbo-frame id="reply_form_<%= comment.id %>">
-      <%= link_to "返信を書く",
-          new_comment_path(post_id: @post.id, parent_id: comment.id),
-          data: { turbo_frame: "reply_form_#{comment.id}" } %>
-    </turbo-frame>
-
-    <% comment.children.each do |reply| %>
-      <div class="reply" style="margin-left:20px;">
-        <p><%= reply.body %></p>
-      </div>
-    <% end %>
-
-  </div>
-<% end %>
+<%= link_to "Back to posts", posts_path %>
 
 <div>
-  <%= link_to "Edit this post", edit_post_path(@post) %> |
-  <%= link_to "Back to posts", posts_path %>
-
-  <%= button_to "Destroy this post", @post, method: :delete %>
+  <% if current_user == @post.user %>
+    <%= link_to "Edit this post", edit_post_path(@post) %>
+    <%= button_to "Destroy this post", @post, method: :delete %>
+  <% end %>
 </div>
