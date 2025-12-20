@@ -2,9 +2,14 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:show, :index]
 
-  def index
-    @posts = Post.all
+def index
+  @posts = Post.includes(:user, :tags).order(created_at: :desc)
+
+  if params[:tag_id].present?
+    @posts = @posts.joins(:tags).where(tags: { id: params[:tag_id] }).distinct
   end
+end
+
 
   def show
   end
@@ -57,6 +62,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body, :status)
+    params.require(:post).permit(:title, :body, :status, tag_ids: [])
   end
 end

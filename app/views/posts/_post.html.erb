@@ -5,6 +5,15 @@
     <%= post.title %>
   </p>
 
+  <% if post.tags.any? %>
+    <p>
+      <strong>Tag:</strong>
+      <% post.tags.each do |tag| %>
+        <%= link_to tag.name, posts_path(tag_id: tag.id), data: { turbo_frame: "_top" }, class: "tag-badge" %>
+      <% end %>
+    </p>
+  <% end %>
+
   <p>
     <strong>Body:</strong>
     <%= post.body %>

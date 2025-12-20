@@ -4,6 +4,16 @@
 
 <h1>Posts</h1>
 
+<% if params[:tag_id].present? %>
+  <% current_tag = Tag.find_by(id: params[:tag_id]) %>
+  <% if current_tag %>
+    <p>
+      タグ「<%= current_tag.name %>」で絞り込み中（<%= current_tag.posts_count %>件）
+      （<%= link_to "全て表示", posts_path %>）
+    </p>
+  <% end %>
+<% end %>
+
 <div id="posts">
   <% @posts.each do |post| %>
     <%= turbo_frame_tag post do %>

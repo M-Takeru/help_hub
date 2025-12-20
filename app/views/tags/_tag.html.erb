@@ -1,6 +1,7 @@
-<div id="<%= dom_id tag %>">
-  <p>
-    <strong>Name:</strong>
-    <%= tag.name %>
-  </p>
-</div>
+<li class="tag-item">
+  <%= link_to posts_path(tag_id: tag.id), data: { turbo_frame: "_top" } do %>
+    <span class="tag-badge">
+      <%= tag.name %> (<%= tag.posts_count %>)
+    </span>
+  <% end %>
+</li>
