@@ -5,7 +5,7 @@ gem "rails", "~> 8.0.2.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 #gem "sprockets-rails", "~> 3.5.2"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.7.3"
+gem "sqlite3", ">= 2.7.3", group: [:development, :test]
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -40,6 +40,7 @@ gem 'pry-rails'
 gem "cssbundling-rails"
 gem "dartsass-rails"
 gem "propshaft"
+gem "pg", "~> 1.5", group: :production
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
