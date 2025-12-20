@@ -28,6 +28,7 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  url: <%= ENV["DATABASE_URL"] %>
+  adapter: postgresql
+  encoding: unicode
+  url: <%= ENV["DATABASE_URL"] %>   # Supabase の接続文字列を使う
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  # database: path/to/persistent/storage/production.sqlite3
