@@ -3,3 +3,4 @@
 @forward "./hero";
 @forward "./flash";
 @use "./home" as *;
+@use "./auth" as *;

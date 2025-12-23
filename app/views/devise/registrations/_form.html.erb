@@ -1,87 +1,87 @@
 <% form_method = @user.persisted? ? :put : :post %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: form_method, multipart: true }) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: form_method, multipart: true, class: "auth-form" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :avatar, "プロフィール画像" %><br />
-    <%= f.file_field :avatar %>
+  <div class="auth-field">
+    <%= f.label :avatar, "プロフィール画像", class: "auth-label" %>
+    <%= f.file_field :avatar, class: "auth-input" %>
   </div>
 
-  <div>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
+  <div class="auth-field">
+    <%= f.label :name, class: "auth-label" %>
+    <%= f.text_field :name, class: "auth-input" %>
   </div>
 
-  <div class="field">
-    <%= f.label :birthday, "生年月日" %><br />
-    <%= f.date_field :birthday, autocomplete: "bday" %>
+  <div class="auth-field">
+    <%= f.label :birthday, "生年月日", class: "auth-label" %>
+    <%= f.date_field :birthday, autocomplete: "bday", class: "auth-input" %>
   </div>
 
-  <div class="field">
-    <%= f.label :gender, "性別" %><br />
-    <%= f.select :gender, User.genders.keys.map { |g| [t("activerecord.attributes.user.gender.#{g}"), g] }, include_blank: "選択してください" %>
+  <div class="auth-field">
+    <%= f.label :gender, "性別", class: "auth-label" %>
+    <%= f.select :gender, User.genders.keys.map { |g| [t("activerecord.attributes.user.gender.#{g}"), g] }, { include_blank: "選択してください" }, class: "auth-select" %>
   </div>
 
-  <div class="field">
-    <%= f.label :introduction %><br />
-    <%= f.text_area :introduction %>
+  <div class="auth-field">
+    <%= f.label :introduction, class: "auth-label" %>
+    <%= f.text_area :introduction, rows: 4, class: "auth-textarea" %>
   </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", readonly: @user.persisted? %>
+  <div class="auth-field">
+    <%= f.label :email, class: "auth-label" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", readonly: @user.persisted?, class: "auth-input" %>
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <div class="auth-field">
+      <p style="color: #fbbf24;">現在確認待ちのメールアドレス: <%= resource.unconfirmed_email %></p>
+    </div>
   <% end %>
 
   <% if @user.persisted? %>
     <!-- 編集時の表示 -->
-
-    <div class="field">
-      <%= f.label :password %> <i><%= t("devise.registrations.edit.leave_blank_note") %></i><br />
-      <%= f.password_field :password, autocomplete: "new-password" %>
+    <div class="auth-field">
+      <%= f.label :password, class: "auth-label" %>
+      <small style="color: #94a3b8;"><%= t("devise.registrations.edit.leave_blank_note") %></small>
+      <%= f.password_field :password, autocomplete: "new-password", class: "auth-input" %>
       <% if @minimum_password_length %>
-        <br />
-        <p class="form-text">
+        <small class="form-text" style="color: #94a3b8;">
           <%= t("devise.registrations.password_hint", min: @minimum_password_length) %>
-        </p>
+        </small>
       <% end %>
     </div>
 
-    <div class="field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+    <div class="auth-field">
+      <%= f.label :password_confirmation, class: "auth-label" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input" %>
     </div>
 
-    <div class="field">
-      <%= f.label :current_password %> <i><%= t("devise.registrations.edit.current_password_note") %></i><br />
-      <%= f.password_field :current_password, autocomplete: "current-password" %>
+    <div class="auth-field">
+      <%= f.label :current_password, class: "auth-label" %>
+      <small style="color: #94a3b8;"><%= t("devise.registrations.edit.current_password_note") %></small>
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "auth-input" %>
     </div>
 
   <% else %>
     <!-- 新規登録時の表示 -->
-
-    <div class="field">
-      <%= f.label :password %><br />
-      <%= f.password_field :password, autocomplete: "new-password" %>
+    <div class="auth-field">
+      <%= f.label :password, class: "auth-label" %>
+      <%= f.password_field :password, autocomplete: "new-password", class: "auth-input" %>
       <% if @minimum_password_length %>
-        <br />
-        <p class="form-text">
+        <small class="form-text" style="color: #94a3b8;">
           <%= t("devise.registrations.password_hint", min: @minimum_password_length) %>
-        </p>
+        </small>
       <% end %>
     </div>
 
-    <div class="field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+    <div class="auth-field">
+      <%= f.label :password_confirmation, class: "auth-label" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input" %>
     </div>
   <% end %>
 
-  <div class="actions">
-    <%= f.submit @user.persisted? ? t("devise.registrations.edit.update_button") : t("devise.registrations.new.submit_button") %>
+  <div class="auth-actions auth-actions--center">
+    <%= f.submit @user.persisted? ? t("devise.registrations.edit.update_button") : t("devise.registrations.new.submit_button"), class: "btn btn-primary" %>
   </div>
 <% end %>

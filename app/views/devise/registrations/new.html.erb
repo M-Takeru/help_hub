@@ -1,7 +1,12 @@
-<h2>Sign up</h2>
+<div class="auth-page">
+  <div class="auth-card auth-card--wide">
+    <h1 class="auth-title">新規登録</h1>
 
-<%= render 'form' %>
+    <%= render "form" %>
 
-<%= render "devise/shared/links" %>
-
-<%= link_to "back to home", root_path%>
+    <div class="auth-links">
+      <%= render "devise/shared/links" %>
+      <%= link_to "ホームに戻る", root_path, class: "auth-link" %>
+    </div>
+  </div>
+</div>
