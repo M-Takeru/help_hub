@@ -1,1 +1,2 @@
-@use "./reset" as *;
+@use "../variable" as *;
+@forward "./reset";

@@ -1,0 +1,61 @@
+@use "../variable" as *;
+
+.hero {
+  padding: 3rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    $color-hero-bg-from,
+    $color-hero-bg-to
+  );
+  color: $color-text-on-dark;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+}
+
+.hero__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+}
+
+.hero__title {
+  font-size: 2rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.hero__subtitle {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: $color-text-subtle-on-dark;
+}
+
+.hero__features {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-feature {
+  background: $color-hero-card-bg;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px $color-shadow-soft;
+}
+
+.home-section {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.home-capabilities {
+  list-style: none;
+  padding-left: 0;
+}
+
+.home-link {
+  margin-right: 1rem;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
