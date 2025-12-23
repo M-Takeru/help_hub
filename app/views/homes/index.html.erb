@@ -39,39 +39,71 @@
   </div>
 </section>
 
-<hr>
-
 <section class="home-section">
-  <h2>このサイトでできること</h2>
-  <ul class="home-capabilities">
-    <li>悩みやモヤモヤを匿名で投稿する</li>
-    <li>似た境遇の人の投稿を読んで安心する</li>
-    <li>コメントで「大丈夫だよ」を届ける</li>
-  </ul>
+  <h2 class="home-section__title">HelpHubでできること</h2>
 
-  <div class="home-links">
-    <%= link_to "投稿一覧を見る", posts_path, class: "home-link" %>
-    <%= link_to "タグ一覧を見る", tags_path, class: "home-link" %>
+  <ul class="home-capabilities">
+    <li class="home-capabilities__item">
+      <h3 class="home-capabilities__item-title">悩みを匿名で投稿</h3>
+      <p class="home-capabilities__item-text">
+        本名や顔を出さずに、今感じている不安やモヤモヤを書き出せる。
+      </p>
+    </li>
+
+    <li class="home-capabilities__item">
+      <h3 class="home-capabilities__item-title">似た境遇の人の声を読む</h3>
+      <p class="home-capabilities__item-text">
+        同じような悩みを抱えた人の投稿を読み、ひとりじゃないと感じられる。
+      </p>
+    </li>
+
+    <li class="home-capabilities__item">
+      <h3 class="home-capabilities__item-title">コメントでそっと支え合う</h3>
+      <p class="home-capabilities__item-text">
+        コメントで「大丈夫だよ」を届けることができる。
+      </p>
+    </li>
+  </ul>
+</section>
+
+<section class="home-section home-section--secondary">
+  <h2 class="home-section__title">まずは、ちょっとだけ覗いてみる</h2>
+  <% if defined?(@recent_posts) && @recent_posts.present? %>
+    <section class="home-section home-section--recent">
+      <h2 class="home-section__title">最近の投稿</h2>
+
+    <ul class="home-recent-posts">
+      <% @recent_posts.each do |post| %>
+        <li class="home-recent-post">
+          <%= link_to post_path(post), class: "home-recent-post__link" do %>
+            <h3 class="home-recent-post__title"><%= post.title %></h3>
+            <p class="home-recent-post__excerpt">
+              <%= truncate(post.body, length: 80) %>
+            </p>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>
+
+
+  <p class="home-section__text">
+    アカウント登録済みの人は、すぐに投稿を始められます。<br>
+    まだ迷っている人は、まず他の人の投稿を読むところからでもOKです。
+  </p>
+
+  <div class="home-section__actions">
+    <%= link_to "投稿一覧を見る", posts_path, class: "btn btn-primary" %>
+    <%= link_to "タグ一覧から探す", tags_path, class: "btn btn-secondary" %>
     <% if current_user %>
       <%= link_to "マイページへ", mypage_path, class: "home-link" %>
     <% end %>
   </div>
-</section>
 
-<% if defined?(@recent_posts) && @recent_posts.present? %>
-  <section class="home-section">
-    <h2>最近の投稿</h2>
-    <ul class="home-recent-posts">
-      <% @recent_posts.each do |post| %>
-        <li class="home-recent-post">
-          <h3><%= link_to post.title, post_path(post) %></h3>
-          <p><%= truncate(post.body, length: 80) %></p>
-        </li>
-      <% end %>
-    </ul>
-
-    <p>
-      <%= link_to "もっと見る", posts_path, class: "home-link" %>
+  <% unless current_user %>
+    <p class="home-section__note">
+      アカウント登録は投稿画面からいつでも行えます。
     </p>
-  </section>
-<% end %>
+  <% end %>
+</section>
