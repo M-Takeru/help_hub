@@ -1,30 +1,77 @@
-<h1>Welcome to HelpHub</h1>
-<p>ここは、あなたの技術的な「助けて」を投稿・共有する場所です。</p>
-<p>
-  <%= link_to "投稿一覧を見る", posts_path %>
-</p>
+<% content_for :title, "HelpHub" %>
 
-<p>
-  <%= link_to "タグ一覧を見る", tags_path %>
-</p>
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__text">
+      <h1 class="hero__title">
+        深夜の悩みを、ひとりで抱えないために。
+      </h1>
 
-<p>
-  <%= link_to "マイページ", mypage_path %>
-</p>
+      <p class="hero__subtitle">
+        HelpHubは、「誰かに話したいけど話せない」人のための
+        匿名相談コミュニティです。気持ちを言葉にして、少しだけ楽になろう。
+      </p>
 
-<% if current_user.present? %>
-  <p>ログイン中</p>
-<% else %>
-  <p>ログアウト中</p>
+      <div class="hero__actions">
+        <%= link_to "今すぐ投稿する", new_post_path, class: "btn btn-primary" %>
+        <%= link_to "みんなの相談を見る", posts_path, class: "btn btn-secondary" %>
+      </div>
+
+      <p class="hero__note">
+        まずは眺めるだけでもOK。あなたのペースで使ってね。
+      </p>
+    </div>
+
+    <div class="hero__features">
+      <div class="hero-feature">
+        <h2>匿名で投稿</h2>
+        <p>本名や顔出しなしで、今の気持ちをそのまま書き出せます。</p>
+      </div>
+      <div class="hero-feature">
+        <h2>コメントで支え合い</h2>
+        <p>似た悩みを持つ人から、やさしい言葉や経験談が届くかも。</p>
+      </div>
+      <div class="hero-feature">
+        <h2>いつでも、どこでも</h2>
+        <p>深夜でも早朝でも、ふと苦しくなったときに開ける場所。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<section class="home-section">
+  <h2>このサイトでできること</h2>
+  <ul class="home-capabilities">
+    <li>悩みやモヤモヤを匿名で投稿する</li>
+    <li>似た境遇の人の投稿を読んで安心する</li>
+    <li>コメントで「大丈夫だよ」を届ける</li>
+  </ul>
+
+  <div class="home-links">
+    <%= link_to "投稿一覧を見る", posts_path, class: "home-link" %>
+    <%= link_to "タグ一覧を見る", tags_path, class: "home-link" %>
+    <% if current_user %>
+      <%= link_to "マイページへ", mypage_path, class: "home-link" %>
+    <% end %>
+  </div>
+</section>
+
+<% if defined?(@recent_posts) && @recent_posts.present? %>
+  <section class="home-section">
+    <h2>最近の投稿</h2>
+    <ul class="home-recent-posts">
+      <% @recent_posts.each do |post| %>
+        <li class="home-recent-post">
+          <h3><%= link_to post.title, post_path(post) %></h3>
+          <p><%= truncate(post.body, length: 80) %></p>
+        </li>
+      <% end %>
+    </ul>
+
+    <p>
+      <%= link_to "もっと見る", posts_path, class: "home-link" %>
+    </p>
+  </section>
 <% end %>
-
-<% unless current_user %>
-  <%= link_to "ログイン", new_user_session_path %>
-<% else %>
-  <%= link_to "ログアウト", destroy_user_session_path, class: "nav-item",
-    data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" } %>
-<% end %>
-
-<div data-controller="hello">
-  ここがStimulusによって自動で置き換わる場所
-</div>
