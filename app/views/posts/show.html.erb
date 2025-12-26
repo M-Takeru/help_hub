@@ -1,14 +1,41 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @post.title %>
 
-<%= render @post %>
+<div class="posts-page">
+  <div class="post-detail">
+    <%= turbo_frame_tag dom_id(@post) do %>
+      <h1><%= @post.title %></h1>
+      
+      <div class="post-detail__meta">
+        <% if @post.tags.any? %>
+          <div class="post-detail__tags">
+            <% @post.tags.each do |tag| %>
+              <%= link_to tag.name, posts_path(tag_id: tag.id), class: "tag-badge" %>
+            <% end %>
+          </div>
+        <% end %>
+        
+        <p class="post-detail__status">
+          <%= I18n.t("enums.post.status.#{@post.status}") %>
+        </p>
+      </div>
 
-<%= render "comments/list", post: @post %> 
+      <div class="post-detail__body">
+        <%= simple_format(@post.body) %>
+      </div>
 
-<%= link_to "Back to posts", posts_path %>
+      <% if current_user == @post.user %>
+        <div class="post-detail__actions">
+          <%= link_to "編集", edit_post_path(@post), 
+                      class: "btn btn-primary",
+                      data: { turbo_frame: dom_id(@post) } %>
+          <%= button_to "削除", @post, 
+                        method: :delete, 
+                        data: { turbo_confirm: "本当に削除しますか?" },
+                        class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 
-<div>
-  <% if current_user == @post.user %>
-    <%= link_to "Edit this post", edit_post_path(@post) %>
-    <%= button_to "Destroy this post", @post, method: :delete %>
-  <% end %>
+  <%= link_to "一覧に戻る", posts_path, class: "home-link" %>
 </div>

@@ -1,5 +1,50 @@
-<%= render post %>
-<%= link_to "Show this post", post_path(post), data: { turbo: false } %></br>
+<div class="post-card-wrapper">
+  <%= link_to post_path(post), class: "post-card-link", data: { turbo: false } do %>
+    <div class="post-card">
+      <div class="post-card__header">
+        <h2 class="post-card__title">
+          <%= post.title.presence || "（タイトル未設定）" %>
+        </h2>
+      </div>
 
-<%= link_to "Edit this post", edit_post_path(post) %>
-<%= button_to "Destroy this post", post, method: :delete %>
+      <p class="post-card__body">
+        <%= truncate(post.body, length: 120) %>
+      </p>
+
+      <% if post.tags.any? %>
+        <div class="post-card__tags">
+          <% post.tags.each do |tag| %>
+            <%= link_to tag.name,
+                        posts_path(tag_id: tag.id),
+                        data: { turbo_frame: "_top" },
+                        class: "tag-badge",
+                        onclick: "event.stopPropagation()" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="post-card__meta">
+        <span class="post-card__status">
+          <%= I18n.t("enums.post.status.#{post.status}") %>
+        </span>
+      </div>
+    </div>
+  <% end %>
+
+  <% if current_user == post.user %>
+    <div class="post-card__actions">
+      <%= link_to "編集",
+            edit_post_path(post),
+            class: "post-card__action post-card__action--edit",
+            data: { turbo_frame: dom_id(post) },
+            onclick: "event.stopPropagation();" %>
+
+      <%= button_to "削除",
+                    post,
+                    method: :delete,
+                    data: { turbo_confirm: "本当に削除しますか？" },
+                    class: "post-card__action post-card__action--delete",
+                    onclick: "event.stopPropagation();" %>
+    </div>
+  <% end %>
+</div>

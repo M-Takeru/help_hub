@@ -1,43 +1,52 @@
-<%= form_with(model: post) do |form| %>
+<%= form_with(
+  model: post, 
+  class: "auth-form",
+  data: turbo_frame_request? ? { turbo_frame: "_top" } : { turbo: false }
+) do |form| %>
   <% if post.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
-      <ul>
+    <div class="auth-errors">
+      <h2 class="auth-errors__title">
+        <%= pluralize(post.errors.count, "個のエラー") %>があります
+      </h2>
+      <ul class="auth-errors__list">
         <% post.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+          <li class="auth-errors__item"><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <!-- ✅ user_idはcurrent_userから渡すので不要 -->
-
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="auth-field">
+    <%= form.label :title, "タイトル", class: "auth-label" %>
+    <%= form.text_field :title, class: "auth-input" %>
   </div>
 
-  <div class="field">
-    <%= form.label :tag_ids, "タグ" %><br>
-    <%= form.collection_check_boxes :tag_ids, Tag.all, :id, :name do |b| %>
-      <div class="tag-checkbox">
-        <%= b.check_box %>
-        <%= b.label %>
-      </div>
-    <% end %>
+  <div class="auth-field">
+    <%= form.label :tag_ids, "タグ", class: "auth-label" %>
+    <div class="tag-checkboxes">
+      <%= form.collection_check_boxes :tag_ids, Tag.all, :id, :name do |b| %>
+        <div class="tag-checkbox">
+          <%= b.check_box %>
+          <%= b.label %>
+        </div>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :body, style: "display: block" %>
-    <%= form.text_area :body %>
+  <div class="auth-field">
+    <%= form.label :body, "本文", class: "auth-label" %>
+    <%= form.text_area :body, rows: 6, class: "auth-textarea" %>
   </div>
 
-  <div>
-    <%= form.label :status, "投稿の状態", style: "display: block" %>
-    <%= form.select :status, Post.statuses.keys.map { |k| [I18n.t("enums.post.status.#{k}"), k] } %>
+  <div class="auth-field">
+    <%= form.label :status, "投稿の状態", class: "auth-label" %>
+    <%= form.select :status, 
+                    Post.statuses.keys.map { |k| [I18n.t("enums.post.status.#{k}"), k] },
+                    {},
+                    class: "auth-select" %>
   </div>
 
-  <div>
-    <%= form.submit "投稿する" %>
+  <div class="auth-actions auth-actions--center">
+    <%= form.submit post.persisted? ? "更新する" : "投稿する", class: "btn btn-primary" %>
   </div>
 <% end %>

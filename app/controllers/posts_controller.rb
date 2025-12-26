@@ -1,14 +1,17 @@
 class PostsController < ApplicationController
+
+  include ActionView::RecordIdentifier
+
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:show, :index]
 
-def index
-  @posts = Post.includes(:user, :tags).order(created_at: :desc)
+  def index
+    @posts = Post.includes(:user, :tags).order(created_at: :desc)
 
-  if params[:tag_id].present?
-    @posts = @posts.joins(:tags).where(tags: { id: params[:tag_id] }).distinct
+    if params[:tag_id].present?
+      @posts = @posts.joins(:tags).where(tags: { id: params[:tag_id] }).distinct
+    end
   end
-end
 
 
   def show
@@ -20,38 +23,49 @@ end
 
   def create
     @post = current_user.posts.build(post_params)
-    respond_to do |format|
-      if @post.save
+
+    if @post.save
+      respond_to do |format|
+        format.html { redirect_to posts_path, notice: "投稿を作成しました。" }
         format.turbo_stream
-        format.html { redirect_to posts_path, notice: 'Post was successfully created.' }
-      else
+      end
+    else
+      respond_to do |format|
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("new_post_form", partial: "new")
+        end
       end
     end
   end
+
 
   def edit
   end
 
   def update
-    respond_to do |format|
-      if @post.update(post_params)
+    if @post.update(post_params)
+      respond_to do |format|
+        format.html { redirect_to posts_path, notice: "投稿を更新しました。" }
         format.turbo_stream
-        format.html { redirect_to posts_path, notice: '投稿が更新されました。' }
-      else
+      end
+    else
+      respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(dom_id(@post), partial: "edit")
+        end
       end
     end
   end
 
+  
   def destroy
-    @post.destroy
+    @post.destroy!
+
     respond_to do |format|
-      format.html { redirect_to posts_path, notice: "投稿が削除されました。", status: :see_other }
-      format.json { head :no_content }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@post) }
+      format.html { redirect_to posts_path, status: :see_other, notice: "投稿を削除しました。" }
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@post)) }
     end
   end
 

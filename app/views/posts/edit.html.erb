@@ -1,14 +1,19 @@
-<% content_for :title, "Editing post" %>
+<% content_for :title, "投稿を編集" %>
 
-<h1>Editing post</h1>
-
-<%= turbo_frame_tag @post do %>
-  <%= render "form", post: @post %>
+<% if turbo_frame_request? %>
+  <%= turbo_frame_tag dom_id(@post) do %>
+    <div class="auth-card auth-card--wide" style="margin-bottom: 2rem; margin-inline: auto;">
+      <h2>投稿を編集</h2>
+      <%= render "form", post: @post %>
+      <%= link_to "キャンセル", posts_path, class: "auth-link", data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="auth-page">
+    <div class="auth-card auth-card--wide">
+      <h2>投稿を編集</h2>
+      <%= render "form", post: @post %>
+      <%= link_to "戻る", posts_path, class: "auth-link" %>
+    </div>
+  </div>
 <% end %>
-
-<br>
-
-<div>
-  <%= link_to "Show this post", @post %>
-  <%= link_to "Back to posts", posts_path %>
-</div>

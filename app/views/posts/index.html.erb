@@ -1,29 +1,42 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Posts" %>
 
-<h1>Posts</h1>
+<div class="posts-page">
+  <div class="posts-header">
+    <h1 class="posts-title">みんなの相談</h1>
 
-<% if params[:tag_id].present? %>
-  <% current_tag = Tag.find_by(id: params[:tag_id]) %>
-  <% if current_tag %>
-    <p>
-      タグ「<%= current_tag.name %>」で絞り込み中（<%= current_tag.posts_count %>件）
-      （<%= link_to "全て表示", posts_path %>）
-    </p>
-  <% end %>
-<% end %>
+    <div class="posts-header__actions">
+      <%= link_to "新規投稿", new_post_path, 
+                  class: "btn btn-primary", 
+                  data: { turbo_frame: "new_post_form" } %>
+    </div>
+  </div>
 
-<div id="posts">
-  <% @posts.each do |post| %>
-    <%= turbo_frame_tag post do %>
-      <%= render partial: "content", locals: { post: post } %>
+  <div class="new-post-container">
+    <%= turbo_frame_tag "new_post_form" %>
+  </div>
+
+  <% if params[:tag_id].present? %>
+    <% current_tag = Tag.find_by(id: params[:tag_id]) %>
+    <% if current_tag %>
+      <div class="posts-filter">
+        <span class="posts-filter__label">
+          タグ「<%= current_tag.name %>」で絞り込み中（<%= current_tag.posts_count %>件）
+        </span>
+        <%= link_to "すべて表示", posts_path, class: "posts-filter__clear" %>
+      </div>
     <% end %>
   <% end %>
+
+  <div id="posts" class="posts-list">
+    <%# turbo_stream_from "posts" %> <%# Turbo版用にコメントアウト %>
+    <% @posts.each do |post| %>
+      <%= turbo_frame_tag dom_id(post) do %>
+        <%= render partial: "content", locals: { post: post } %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="posts-footer-link">
+    <%= link_to "ホームに戻る", root_path, class: "home-link" %>
+  </div>
 </div>
-
-<%= turbo_frame_tag "new_post" do %>
-  <%= link_to "新規投稿", new_post_path %>
-<% end %>
-
-<%= link_to "ホームに戻る", root_path %>

@@ -1,12 +1,19 @@
-<% content_for :title, "New post" %>
+<% content_for :title, "新規投稿" %>
 
-<h1>New post</h1>
-
-<%= turbo_frame_tag @post do %>
-  <%= render "form", post: @post %>
+<% if turbo_frame_request? %>
+  <%= turbo_frame_tag "new_post_form" do %>
+    <div class="auth-card auth-card--wide" style="margin-bottom: 2rem; margin-inline: auto;">
+      <h2>新規投稿</h2>
+      <%= render "form", post: @post %>
+      <%= link_to "キャンセル", posts_path, class: "auth-link", data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="auth-page">
+    <div class="auth-card auth-card--wide">
+      <h2>新規投稿</h2>
+      <%= render "form", post: @post %>
+      <%= link_to "キャンセル", posts_path, class: "auth-link" %>
+    </div>
+  </div>
 <% end %>
-<br>
-
-<div>
-  <%= link_to "Back to posts", posts_path %>
-</div>
